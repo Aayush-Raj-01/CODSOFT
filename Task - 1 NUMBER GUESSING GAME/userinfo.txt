@@ -1,1 +1,2 @@
-AYush ||rajj
+\\Username||Password||totalscore
+Aayush Raj||23456789||10

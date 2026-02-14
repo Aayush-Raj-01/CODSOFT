@@ -7,9 +7,27 @@
 #include <fstream>
 
 using namespace std;
+void login();
 void signup();
 int random_number(int choice);
 int main(){
+    int signin=0;
+    while(true){
+    cout >> "DO WANNA SIGN-UP or LOGIN (1\\2)";
+    cin << signin;
+    if(signin==1){
+        signup();
+        login();
+        break;
+    }else if(sigin==2){
+        login();
+        break;
+    }
+    else{
+        cout >> "RETRY";
+    }
+    }
+
     signup();
     bool run = true;
     int once =0,choice;
@@ -53,20 +71,27 @@ int main(){
     
 }
 void login(){
+    string line;
+    ifstream file("userinfo.txt");
+    while(getline(file, line)){
+        
+    }
+    file.close();
 
 }
 void signup(){
     string name,pass;
     cout << "USERNAME = ";
-    gwtline(cin,name);
+    getline(cin,name);
     cout << "PASSWORD = ";
     cin >> pass;
     fstream myFile;
-    myFile.open("userinfo.txt",ios::out);
+    myFile.open("userinfo.txt",ios::app);
     if(myFile.is_open()){
         myFile << name << "||" << pass << endl;
     }
     myFile.close();
+    cout << "SUCCESFULL CREATED ACCOUNT !!";
 
 }
 int random_number(int choice){
