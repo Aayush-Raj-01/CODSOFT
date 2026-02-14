@@ -1,3 +1,4 @@
+//wanted to implement score system but got out of time
 #include <iostream>
 #include <cstdlib>
 #include <cctype>
@@ -7,28 +8,34 @@
 #include <fstream>
 
 using namespace std;
-void login();
+bool login(bool loginin);
 void signup();
-int random_number(int choice);
+void removeTrailingSpaces(string& s);
+int random_number(int choice,int &diff,int &chance);
 int main(){
+    srand(time(nullptr));
     int signin=0;
+    bool loginin=false;
     while(true){
-    cout >> "DO WANNA SIGN-UP or LOGIN (1\\2)";
-    cin << signin;
+    cout << "DO WANNA SIGN-UP or LOGIN (1\\2) :";
+    cin >> signin;
+    cin.ignore();
     if(signin==1){
         signup();
-        login();
+        while(!loginin){
+        loginin=login(loginin);
+        }
         break;
-    }else if(sigin==2){
-        login();
+    }else if(signin==2){
+        while(!loginin){
+        loginin=login(loginin);
+        }
         break;
     }
     else{
-        cout >> "RETRY";
+        cout << "RETRY CHOOSE ONLY 1 OR 2";
     }
     }
-
-    signup();
     bool run = true;
     int once =0,choice;
     std::string agree="";
@@ -59,60 +66,101 @@ int main(){
             }
         }
     }
-    int guess,diff = random_number(choice);
+    int diff=0,chance=0;
+    int guess = random_number(choice,diff,chance);
     int userguess=0;
-    std::cout << "GUSSE THE NUMBER BETWEEN 1 - " << diff << " : ";
-    std::cin >> userguess;
 
+    while(chance){
+
+        std::cout << "GUSSE THE NUMBER BETWEEN 1 - " << diff << " YOUR HAVE "<< chance <<" left"<<  " : ";
+        std::cin >> userguess;
+        chance--;
+    
+        if(userguess == guess){
+            cout << "YEA !! YOU GUSSED THE CORRECT NUMBER\n";
+            break;
+        }else{
+            cout << "WRONG ANS RETRY !\n";
+        }
+    }
+    if(chance==0){
+        cout << "YOU RAN OUT OF CAHNCES\n";
+    }
 
 
     }
 
     
 }
-void login(){
+bool login(bool loginin){
     string line,username,pass;
     ifstream file("userinfo.txt");
-    while(true){
         cout << "USERNAME : ";
-        cin >> username;
+        getline(cin,username);
         cout << "PASSWORD : ";
-        cin  >> pass;
+        getline(cin,pass);
+        removeTrailingSpaces(username); 
+        removeTrailingSpaces(pass);
     while(getline(file, line)){
         size_t pos1 = line.find("||");
-        if()
+        if(pos1 == string::npos) continue;
+        size_t pos2 = line.find("||", pos1 + 2);
+        if(pos2 == string::npos) continue;
 
-    }}
+        string fusername = line.substr(0,pos1);
+        string fpassword = line.substr(pos1+2,pos2 - pos1 -2 );
+
+        if(fusername == username && fpassword == pass){
+            cout << "SUCCESFULYY LOGINED !!\n";
+            loginin = true;
+            return loginin;
+        }
+        
+        
+        
+    }
     file.close();
+    cout << "LOGINED FAILED !!\n";
+    return loginin;
 
 }
 void signup(){
-    string name,pass;
+    string name;
+    string pass;
     cout << "USERNAME = ";
     getline(cin,name);
+    removeTrailingSpaces(name);
     cout << "PASSWORD = ";
-    cin >> pass;
+    getline(cin, pass);
+    removeTrailingSpaces(pass);
     fstream myFile;
     myFile.open("userinfo.txt",ios::app);
     if(myFile.is_open()){
-        myFile << name << "||" << pass << endl;
+        myFile << name << "||" << pass << "||" << '0' << endl;
     }
     myFile.close();
-    cout << "SUCCESFULL CREATED ACCOUNT !!";
+    cout << "SUCCESFULL CREATED ACCOUNT !!\n";
+    cout << "NOW RELOGIN\n";
 
 }
-int random_number(int choice){
-    srand(time(nullptr));
-    int diff=0;
+int random_number(int choice,int &diff,int &chance){
     if(choice==1){
         diff=10;
+        chance = 3;
     }else if(choice==2){
         diff =30;
+        chance=8;
     }else{
         diff=100;
+        chance = 15;
     }
     
 
     int num = rand() % diff + 1 ;
-    return num,diff;
+    return num;
+}
+void removeTrailingSpaces(string& s) {
+    while (!s.empty() && s.back() == ' ') {
+        s.pop_back();
+    }
 }

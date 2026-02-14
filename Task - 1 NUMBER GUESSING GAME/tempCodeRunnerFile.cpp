@@ -1,2 +1,1 @@
-
-    int guess = random_number(choice);
+cin.ignore();
