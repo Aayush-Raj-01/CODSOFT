@@ -71,11 +71,18 @@ int main(){
     
 }
 void login(){
-    string line;
+    string line,username,pass;
     ifstream file("userinfo.txt");
+    while(true){
+        cout << "USERNAME : ";
+        cin >> username;
+        cout << "PASSWORD : ";
+        cin  >> pass;
     while(getline(file, line)){
-        
-    }
+        size_t pos1 = line.find("||");
+        if()
+
+    }}
     file.close();
 
 }
