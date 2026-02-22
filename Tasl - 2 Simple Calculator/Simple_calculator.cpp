@@ -27,6 +27,6 @@ int main(){
             ans /= stoi(temp);
         }
     }
-    cout << "Your Answer is = " << ans;
+    cout << "YouCr Answer is = " << ans;
     return 0 ;
 }
